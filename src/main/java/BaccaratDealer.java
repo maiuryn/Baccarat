@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Random;
 
 public class BaccaratDealer {
     private ArrayList<Card> deck;
@@ -47,10 +48,19 @@ public class BaccaratDealer {
     }
 
     public void shuffleDeck() {
-        // TODO
+        ArrayList<Card> shuffled = new ArrayList<>();
+        Random r = new Random();    
+        
+        while (this.deckSize() > 0) {
+            int index = r.nextInt(this.deckSize());
+            shuffled.add(this.deck.get(index));
+            this.deck.remove(index);
+        }
+
+        this.deck = shuffled;
     }
 
     public int deckSize() {
-        return deck.size();
+        return this.deck.size();
     }
 }

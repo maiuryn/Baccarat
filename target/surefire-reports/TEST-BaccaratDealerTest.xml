@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="BaccaratDealerTest" time="0.132" tests="3" errors="0" skipped="0" failures="1">
+  <properties>
+    <property name="awt.toolkit" value="sun.awt.X11.XToolkit"/>
+    <property name="java.specification.version" value="11"/>
+    <property name="sun.cpu.isalist" value=""/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.class.path" value="/home/sebastianho0311/School/342/Projects/Baccarat/target/test-classes:/home/sebastianho0311/School/342/Projects/Baccarat/target/classes:/home/sebastianho0311/.m2/repository/org/junit/jupiter/junit-jupiter/5.9.1/junit-jupiter-5.9.1.jar:/home/sebastianho0311/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.9.1/junit-jupiter-api-5.9.1.jar:/home/sebastianho0311/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/home/sebastianho0311/.m2/repository/org/junit/platform/junit-platform-commons/1.9.1/junit-platform-commons-1.9.1.jar:/home/sebastianho0311/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/home/sebastianho0311/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.9.1/junit-jupiter-params-5.9.1.jar:/home/sebastianho0311/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.9.1/junit-jupiter-engine-5.9.1.jar:/home/sebastianho0311/.m2/repository/org/junit/platform/junit-platform-engine/1.9.1/junit-platform-engine-1.9.1.jar:/home/sebastianho0311/.m2/repository/org/openjfx/javafx-controls/19.0.2.1/javafx-controls-19.0.2.1.jar:/home/sebastianho0311/.m2/repository/org/openjfx/javafx-controls/19.0.2.1/javafx-controls-19.0.2.1-linux.jar:/home/sebastianho0311/.m2/repository/org/openjfx/javafx-graphics/19.0.2.1/javafx-graphics-19.0.2.1.jar:/home/sebastianho0311/.m2/repository/org/openjfx/javafx-graphics/19.0.2.1/javafx-graphics-19.0.2.1-linux.jar:/home/sebastianho0311/.m2/repository/org/openjfx/javafx-base/19.0.2.1/javafx-base-19.0.2.1.jar:/home/sebastianho0311/.m2/repository/org/openjfx/javafx-base/19.0.2.1/javafx-base-19.0.2.1-linux.jar:/home/sebastianho0311/.m2/repository/org/openjfx/javafx-fxml/19.0.2.1/javafx-fxml-19.0.2.1.jar:/home/sebastianho0311/.m2/repository/org/openjfx/javafx-fxml/19.0.2.1/javafx-fxml-19.0.2.1-linux.jar:"/>
+    <property name="java.vm.vendor" value="Debian"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.vendor.url" value="https://tracker.debian.org/openjdk-11"/>
+    <property name="user.timezone" value=""/>
+    <property name="java.vm.specification.version" value="11"/>
+    <property name="os.name" value="Linux"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="user.country" value="US"/>
+    <property name="sun.boot.library.path" value="/usr/lib/jvm/java-11-openjdk-amd64/lib"/>
+    <property name="sun.java.command" value="/home/sebastianho0311/School/342/Projects/Baccarat/target/surefire/surefirebooter12665805572364392469.jar /home/sebastianho0311/School/342/Projects/Baccarat/target/surefire 2023-10-18T17-14-54_183-jvmRun1 surefire4980823788683577281tmp surefire_03929777133952934766tmp"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="surefire.test.class.path" value="/home/sebastianho0311/School/342/Projects/Baccarat/target/test-classes:/home/sebastianho0311/School/342/Projects/Baccarat/target/classes:/home/sebastianho0311/.m2/repository/org/junit/jupiter/junit-jupiter/5.9.1/junit-jupiter-5.9.1.jar:/home/sebastianho0311/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.9.1/junit-jupiter-api-5.9.1.jar:/home/sebastianho0311/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/home/sebastianho0311/.m2/repository/org/junit/platform/junit-platform-commons/1.9.1/junit-platform-commons-1.9.1.jar:/home/sebastianho0311/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/home/sebastianho0311/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.9.1/junit-jupiter-params-5.9.1.jar:/home/sebastianho0311/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.9.1/junit-jupiter-engine-5.9.1.jar:/home/sebastianho0311/.m2/repository/org/junit/platform/junit-platform-engine/1.9.1/junit-platform-engine-1.9.1.jar:/home/sebastianho0311/.m2/repository/org/openjfx/javafx-controls/19.0.2.1/javafx-controls-19.0.2.1.jar:/home/sebastianho0311/.m2/repository/org/openjfx/javafx-controls/19.0.2.1/javafx-controls-19.0.2.1-linux.jar:/home/sebastianho0311/.m2/repository/org/openjfx/javafx-graphics/19.0.2.1/javafx-graphics-19.0.2.1.jar:/home/sebastianho0311/.m2/repository/org/openjfx/javafx-graphics/19.0.2.1/javafx-graphics-19.0.2.1-linux.jar:/home/sebastianho0311/.m2/repository/org/openjfx/javafx-base/19.0.2.1/javafx-base-19.0.2.1.jar:/home/sebastianho0311/.m2/repository/org/openjfx/javafx-base/19.0.2.1/javafx-base-19.0.2.1-linux.jar:/home/sebastianho0311/.m2/repository/org/openjfx/javafx-fxml/19.0.2.1/javafx-fxml-19.0.2.1.jar:/home/sebastianho0311/.m2/repository/org/openjfx/javafx-fxml/19.0.2.1/javafx-fxml-19.0.2.1-linux.jar:"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="/home/sebastianho0311"/>
+    <property name="user.language" value="en"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.version.date" value="2023-07-18"/>
+    <property name="java.home" value="/usr/lib/jvm/java-11-openjdk-amd64"/>
+    <property name="file.separator" value="/"/>
+    <property name="basedir" value="/home/sebastianho0311/School/342/Projects/Baccarat"/>
+    <property name="java.vm.compressedOopsMode" value="32-bit"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment"/>
+    <property name="surefire.real.class.path" value="/home/sebastianho0311/School/342/Projects/Baccarat/target/surefire/surefirebooter12665805572364392469.jar"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="java.runtime.version" value="11.0.20+8-post-Debian-1deb11u1"/>
+    <property name="user.name" value="sebastianho0311"/>
+    <property name="path.separator" value=":"/>
+    <property name="os.version" value="5.15.124-20281-g306376f9e9db"/>
+    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+    <property name="localRepository" value="/home/sebastianho0311/.m2/repository"/>
+    <property name="java.vendor.url.bug" value="https://bugs.debian.org/openjdk-11"/>
+    <property name="java.io.tmpdir" value="/tmp"/>
+    <property name="java.version" value="11.0.20"/>
+    <property name="user.dir" value="/home/sebastianho0311/School/342/Projects/Baccarat"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="java.awt.printerjob" value="sun.print.PSPrinterJob"/>
+    <property name="sun.os.patch.level" value="unknown"/>
+    <property name="java.library.path" value="/usr/java/packages/lib:/usr/lib/x86_64-linux-gnu/jni:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/usr/lib/jni:/lib:/usr/lib"/>
+    <property name="java.vm.info" value="mixed mode, sharing"/>
+    <property name="java.vendor" value="Debian"/>
+    <property name="java.vm.version" value="11.0.20+8-post-Debian-1deb11u1"/>
+    <property name="java.specification.maintenance.version" value="2"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="java.class.version" value="55.0"/>
+  </properties>
+  <testcase name="test_deck_size" classname="BaccaratDealerTest" time="0.064"/>
+  <testcase name="test_constructor_dealer" classname="BaccaratDealerTest" time="0.014"/>
+  <testcase name="test_constructor_dealer_matching_deck" classname="BaccaratDealerTest" time="0.031">
+    <failure message="Values not matching ==&gt; array contents differ at index [0], expected: &lt;0&gt; but was: &lt;1&gt;" type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: Values not matching ==> array contents differ at index [0], expected: <0> but was: <1>
+	at BaccaratDealerTest.test_constructor_dealer_matching_deck(BaccaratDealerTest.java:109)
+]]></failure>
+    <system-out><![CDATA[Spades 0 11
+Diamonds 0 11
+Diamonds 0 13
+Spades 2 2
+Spades 9 9
+Hearts 8 8
+Hearts 0 13
+Clubs 0 11
+Hearts 1 1
+Diamonds 6 6
+Hearts 3 3
+Spades 8 8
+Hearts 6 6
+Clubs 3 3
+Hearts 7 7
+Hearts 0 10
+Diamonds 9 9
+Diamonds 1 1
+Clubs 0 13
+Clubs 4 4
+Hearts 4 4
+Spades 0 10
+Clubs 6 6
+Hearts 0 11
+Hearts 5 5
+Spades 3 3
+Hearts 2 2
+Clubs 1 1
+Diamonds 5 5
+Clubs 0 12
+Diamonds 2 2
+Spades 1 1
+Clubs 0 10
+Diamonds 3 3
+Spades 6 6
+Spades 7 7
+Spades 4 4
+Diamonds 0 10
+Diamonds 0 12
+Hearts 9 9
+Spades 0 13
+Spades 5 5
+Diamonds 7 7
+Spades 0 12
+Hearts 0 12
+Clubs 9 9
+Diamonds 4 4
+Clubs 5 5
+Clubs 7 7
+Diamonds 8 8
+Clubs 2 2
+Clubs 8 8
+Clubs 1 1
+Diamonds 9 9
+Hearts 4 4
+Diamonds 2 2
+Diamonds 0 10
+Hearts 8 8
+Hearts 2 2
+Spades 4 4
+Spades 0 12
+Hearts 5 5
+Clubs 0 10
+Spades 3 3
+Hearts 9 9
+Hearts 6 6
+Diamonds 0 13
+Spades 8 8
+Clubs 8 8
+Clubs 6 6
+Diamonds 3 3
+Hearts 0 11
+Diamonds 0 11
+Hearts 0 10
+Spades 9 9
+Hearts 7 7
+Clubs 0 13
+Spades 0 10
+Spades 5 5
+Clubs 2 2
+Spades 7 7
+Diamonds 8 8
+Diamonds 6 6
+Hearts 0 13
+Spades 6 6
+Diamonds 5 5
+Hearts 1 1
+Clubs 5 5
+Diamonds 7 7
+Spades 0 13
+Clubs 7 7
+Clubs 0 11
+Hearts 0 12
+Clubs 4 4
+Spades 2 2
+Diamonds 1 1
+Clubs 9 9
+Spades 0 11
+Diamonds 4 4
+Spades 1 1
+Hearts 3 3
+Diamonds 0 12
+Clubs 3 3
+Clubs 0 12
+]]></system-out>
+  </testcase>
+</testsuite>

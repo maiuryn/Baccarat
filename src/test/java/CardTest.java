@@ -13,12 +13,16 @@ class CardTest {
         Card a = new Card("A", 1);
         assertEquals("A", a.getSuite(), "Suite incorrect");
         assertEquals(1, a.getValue(), "Value incorrect");
-        assertEquals(1, a.getId(), "Id incorrect");
+        assertEquals(1, a.getId(), "Id incorrect");    
+    }
 
+    @Test
+    void test_constructor_card_large_id() {
         Card b = new Card("A", 11);
         assertEquals("A", b.getSuite(), "Suite incorrect");
         assertEquals(0, b.getValue(), "Value incorrect");
         assertEquals(11, b.getId(), "Id incorrect");
-        
+    
     }
+    
 }
