@@ -3,7 +3,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
-
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 
 import org.junit.jupiter.params.ParameterizedTest;
@@ -12,6 +12,24 @@ import java.util.Collections;
 import java.util.Comparator;
 
 class BaccaratDealerTest {
+    static Comparator<Card> comp;
+    @BeforeAll
+    static void setup() {
+        comp = new Comparator<Card>() {
+            @Override
+            public int compare(Card first, Card second) {
+                int result = 0;
+                result = first.getSuite().compareTo(second.getSuite());
+                if (result == 0)
+                    result = first.getId() > second.getId() ? 1 : first.getId() < second.getId() ? -1 : 0;
+                if (result == 0)
+                    result = first.getValue() > second.getValue() ? 1 : first.getValue() < second.getValue() ? -1 : 0;
+                
+                return result;
+            }
+        };
+    }
+
     @Test
     void test_constructor_dealer() {
         BaccaratDealer a = new BaccaratDealer();
@@ -29,25 +47,6 @@ class BaccaratDealerTest {
 
         assertEquals(52, numCards, "number of cards incorrect");
         assertEquals(0, a.deckSize(), "deckSize incorrect");
-        
-        // BaccaratDealer b = new BaccaratDealer();
-        // ArrayList<Card> b_cards = new ArrayList<>();
-        // numCards = 0;
-        // while (b.deckSize() > 0) {
-        //     Card curr = b.drawOne();
-        //     numCards += 1;
-        //     b_cards.add(curr);
-        //     System.out.println(curr.getSuite() + " " + curr.getValue() + " " + curr.getId());
-        // }
-
-        // assertEquals(52, numCards, "number of cards incorrect");
-        // assertEquals(0, b.deckSize(), "deckSize incorrect");
-
-        // Comparator<Card> comp = Comparator.comparing(Card::getSuite);
-        // Collections.sort(b_cards, comp);
-        // Collections.sort(a_cards, comp);
-
-        // assertEquals(a_cards.toArray(), b_cards.toArray(), "Cards not matching");
     }
 
     @Test
@@ -80,8 +79,7 @@ class BaccaratDealerTest {
 
         assertEquals(52, numCards, "number of cards incorrect");
         assertEquals(0, b.deckSize(), "deckSize incorrect");
-
-        Comparator<Card> comp1 = Comparator.comparing(Card::getSuite);
+        
         Collections.sort(b_cards, comp);
         Collections.sort(a_cards, comp);
 
@@ -108,6 +106,60 @@ class BaccaratDealerTest {
         assertArrayEquals(a_suites, b_suites, "Suites not matching");
         assertArrayEquals(a_vals, b_vals, "Values not matching");
         assertArrayEquals(a_ids, b_ids, "ids not matching");
+    }
+
+    @Test
+    void test_draw_one() {
+        BaccaratDealer a = new BaccaratDealer();
+
+        assertEquals(52, a.deckSize());
+        Card c1 = a.drawOne();
+        assertEquals(51, a.deckSize(), "drawOne not drawing");
+        assertNotNull(c1, "drawOne no object");
+    }   
+
+    @Test 
+    void test_generate_deck() {
+        BaccaratDealer a = new BaccaratDealer();
+        a.generateDeck();
+        assertEquals(52, a.deckSize(), "size incorrect");
+    }
+
+    @Test
+    void test_generate_draw_one() {
+        BaccaratDealer a = new BaccaratDealer();
+        a.drawOne();
+        assertEquals(51, a.deckSize(), "size incorrect");
+        a.generateDeck();
+        assertEquals(52, a.deckSize(), "size incorrect after generate");
+    }
+
+    @Test
+    void test_deal_hand() {
+        BaccaratDealer a = new BaccaratDealer();
+        for (int i = 0; i < 26; i++) {
+            ArrayList<Card> curr = a.dealHand();
+            assertEquals(2, curr.size(), "current hand not size 2");
+        }
+
+        boolean exception = false;
+        try {
+            a.dealHand();
+        }
+        catch (IllegalStateException e) {
+            exception = true;
+        }
+        
+        assertTrue(exception, "Exception not handled properly");
+    }
+
+    @Test
+    void test_deal_hand_generate() {
+        BaccaratDealer a = new BaccaratDealer();
+        a.dealHand();
+        assertEquals(50, a.deckSize(), "size incorrect");
+        a.generateDeck();
+        assertEquals(52, a.deckSize(), "size incorrect after generate");
     }
 
     @Test

@@ -3,10 +3,12 @@ public class Card {
     private int value;
     private int id;
 
-    public Card(String mySuite, int myVal) {
+    // Suite and id
+    // id of 11 is Jack, 12 Queen, 13, King
+    public Card(String mySuite, int myId) {
         this.suite = mySuite;
-        this.value = myVal >= 10 ? 0 : myVal;
-        this.id = myVal;
+        this.value = myId >= 10 ? 0 : myId;
+        this.id = myId;
     }
 
     public String getSuite() {

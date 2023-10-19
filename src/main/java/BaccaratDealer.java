@@ -1,11 +1,11 @@
 import java.util.ArrayList;
 import java.util.Random;
+import java.lang.IllegalStateException;
 
 public class BaccaratDealer {
     private ArrayList<Card> deck;
 
     public BaccaratDealer() {
-        this.clearDeck();
         this.generateDeck();
     }
 
@@ -15,6 +15,7 @@ public class BaccaratDealer {
 
     // Standard 52 card deck
     public void generateDeck() {
+        this.clearDeck();
         ArrayList<String> suites = new ArrayList<>();
         suites.add("Hearts");
         suites.add("Diamonds");
@@ -34,6 +35,9 @@ public class BaccaratDealer {
 
     // Deal 2 cards
     public ArrayList<Card> dealHand() {
+        if (this.deckSize() < 2) {
+            throw new IllegalStateException("Can't deal hand");
+        }
         ArrayList<Card> hand = new ArrayList<>();
         hand.add(this.drawOne());
         hand.add(this.drawOne());
