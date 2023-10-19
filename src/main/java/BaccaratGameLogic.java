@@ -12,14 +12,14 @@ public class BaccaratGameLogic {
 
     // Player dealt hand first, so they should win if natural,
     // then Banker dealt hand, so they should win if natural.
-    public static String whoWon(ArrayList<Card> player, ArrayList<Card> banker) {
+    public String whoWon(ArrayList<Card> player, ArrayList<Card> banker) {
         int playerScore = 9 - handTotal(player);
         int bankerScore = 9 - handTotal(banker);
         return playerScore < bankerScore ? "Player" :
                bankerScore < playerScore ? "Banker" : "Draw";
     }
 
-    public static int handTotal(ArrayList<Card> hand) {
+    public int handTotal(ArrayList<Card> hand) {
         int total = 0;
 
         for (Card c : hand) 
@@ -28,7 +28,7 @@ public class BaccaratGameLogic {
         return total % 10;
     }
 
-    public static boolean evaluateBankerDraw(ArrayList<Card> hand, Card playerCard) {
+    public boolean evaluateBankerDraw(ArrayList<Card> hand, Card playerCard) {
         int bankerTotal = handTotal(hand);
         if (bankerTotal >= 7)
             return false;
@@ -42,7 +42,7 @@ public class BaccaratGameLogic {
 
     // The Player will go first: if hand totals to 5 or less, The Player gets one more
     // card. If the hand totals to 6 or 7 points, no more cards are given.
-    public static boolean evaluatePlayerDraw(ArrayList<Card> hand) {
+    public boolean evaluatePlayerDraw(ArrayList<Card> hand) {
         int playerTotal = handTotal(hand);
         if (playerTotal >= 6) 
             return false;
