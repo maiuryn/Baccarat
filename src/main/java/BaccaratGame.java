@@ -36,6 +36,8 @@ import javafx.scene.text.Font;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
 import javafx.scene.control.ComboBox;
+import javafx.scene.image.Image;
+import javafx.scene.transform.Translate;
 
 
 public class BaccaratGame extends Application {
@@ -121,7 +123,7 @@ public class BaccaratGame extends Application {
 				"Draw",
 				"Banker"
 			);
-			
+
 		ComboBox<String> cb = new ComboBox<>(options);
 
 		VBox vb1 = new VBox(betSlider, betAmount, cb);
@@ -147,9 +149,10 @@ public class BaccaratGame extends Application {
 		betSlider.setMinWidth(500);
 		vb1.setAlignment(Pos.CENTER);
 		vb2.setAlignment(Pos.TOP_CENTER);
-		VBox.setMargin(betSlider, new Insets(10, 10, 10, 10));
+		VBox.setMargin(betSlider, new Insets(50, 10, 10, 10));
 		VBox.setMargin(title, new Insets(10, 10, 10, 10));
-		VBox.setMargin(confirmButton, new Insets(20, 50, 50, 50));
+		VBox.setMargin(confirmButton, new Insets(50, 50, 50, 50));
+		VBox.setMargin(betAmount,  new Insets(20, 50, 20, 50));
 
 		Background background = new Background(new BackgroundFill(Color.LIGHTGREY, new CornerRadii(10), new Insets(0, 0, 0, 0)));
 		root.setBackground(background);
@@ -159,6 +162,7 @@ public class BaccaratGame extends Application {
 				currentBet = Double.parseDouble(betAmount.getText());
 				int lastIndex = this.currentScreen.getChildren().size() - 1;
 				this.currentScreen.getChildren().remove(lastIndex);
+				playGame();
 				busy = false;
 			}
 		});
@@ -249,6 +253,7 @@ public class BaccaratGame extends Application {
 			+ "Before the game starts, there is a betting phase. Place a bet on what you expect the game to result in.\n"
 			+ "The game starts by dealing two cards to the player. At this point, if the player has a natural win, the player will win.\n"
 			+ "Then, two cards are dealt to the banker. If the banker has a natural win, the banker will win.\n"
+			+ "If both the banker and the player have a natural, then the higher natural is chosen for the winner. If both are the same number, then the game is a draw. \n"
 			+ "Next, the player will go first. If the player's hand totals to 5 or less, The Player gets one more card. If the hand totals to 6 or 7 points, no more cards are given.\n"
 			+ "Points will be totaled up to 9. If points go over 9, only the remaining points past 9 will be counted as points.\n"
 			+ "For example, if the player has 5 points, and they draw a 9, the resulting score will be 4 + 9 = 13, and we will drop the tens place, resulting in a score of 3.\n"
@@ -359,8 +364,22 @@ public class BaccaratGame extends Application {
 		Button beginButton = new Button("Begin Round");
 		Button titleButton = titleButton();
 		BorderPane top = new BorderPane();
+		HBox playerCards = new HBox(20);
+		HBox bankerCards = new HBox(20);
+		HBox cards = new HBox(200, playerCards, bankerCards);
 
-		StackPane root = new StackPane(bp);
+		Text playerTitle = new Text("Player");
+		Text bankerTitle = new Text("Banker");
+		playerTitle.setFont(new Font(35));
+		bankerTitle.setFont(new Font(35));
+		HBox handTitles = new HBox(400, playerTitle, bankerTitle);
+		handTitles.setAlignment(Pos.TOP_CENTER);
+
+		cards.setAlignment(Pos.CENTER);
+		playerCards.setAlignment(Pos.CENTER_LEFT);
+		bankerCards.setAlignment(Pos.CENTER_LEFT);
+
+		StackPane root = new StackPane(cards, handTitles, bp);
 		
 		beginButton.setFont(new Font(40));
 		top.setLeft(titleButton);
@@ -368,7 +387,7 @@ public class BaccaratGame extends Application {
 		
 		bp.setCenter(beginButton);
 		bp.setTop(top);
-		bp.setBackground(background());
+		root.setBackground(background());
 
 		titleButton.setAlignment(Pos.TOP_LEFT);
 		BorderPane.setAlignment(titleButton, Pos.TOP_LEFT);
@@ -377,6 +396,11 @@ public class BaccaratGame extends Application {
 		menuBar.setAlignment(Pos.TOP_RIGHT);
 		BorderPane.setAlignment(menuBar, Pos.TOP_RIGHT);
 		BorderPane.setMargin(menuBar, new Insets(10, 10, 10, 10));
+
+		StackPane.setMargin(cards, new Insets(0, 10, 10, 10));
+		Translate cardsT = new Translate(0, -75, 0);
+		cards.getTransforms().addAll(cardsT);
+		StackPane.setMargin(handTitles, new Insets(75, 10, 10, 10));
 
 		beginButton.setOnAction(e -> {
 			if (!busy) {
@@ -390,6 +414,76 @@ public class BaccaratGame extends Application {
 		});
 		
 		return root;
+	}
+
+	private String getUrl(Card c) {
+		String suite = c.getSuite().substring(0, 1).toLowerCase();
+		String cardVal[] = {"a", "2", "3", "4", "5", "6", "7", "8", "9", "10", "j", "q", "k"}; 
+		String url = "/large/card_b_" + suite + cardVal[c.getId()] + "_large.png";
+		System.out.println(url);
+		return url;
+	}
+
+	private ArrayList<Image> loadCards(ArrayList<Card> hand) {
+		ArrayList<Image> imgs = new ArrayList<>();
+
+		for (Card c : hand) 
+			imgs.add(new Image(getUrl(c), 125, 0, true, true));
+
+		return imgs;
+	}
+
+	private void fadeCards(ArrayList<ImageView> hand) {
+		for (ImageView i : hand) {
+			FadeTransition ft = new FadeTransition(Duration.millis(5000), i);
+			ft.setFromValue(0);
+			ft.setToValue(1);
+
+			ft.play();
+		}
+	}
+
+	private ArrayList<ImageView> loadImageViews(ArrayList<Image> hand) {
+		ArrayList<ImageView> imgv = new ArrayList<>();
+
+		for (Image i : hand) 
+			imgv.add(new ImageView(i));
+
+		for (ImageView i : imgv)
+			i.setVisible(false);	
+			
+		return imgv;
+	}
+
+	private void playGame() {
+		HBox cards = (HBox)this.currentScreen.getChildren().get(0);
+		HBox playerCards = (HBox)cards.getChildren().get(0);
+		HBox bankerCards = (HBox)cards.getChildren().get(1);
+
+		String winner;
+
+		// Deal starting hands
+		this.playerHand = theDealer.dealHand();
+		this.bankerHand = theDealer.dealHand();
+		
+		ArrayList<Image> playerImages = loadCards(playerHand);
+		ArrayList<Image> bankerImages = loadCards(bankerHand);
+		
+		ArrayList<ImageView> playerImageViews = loadImageViews(playerImages);
+		ArrayList<ImageView> bankerImageViews = loadImageViews(bankerImages);
+		
+		for (ImageView i : playerImageViews)
+			playerCards.getChildren().add(i);
+		for (ImageView i : bankerImageViews)
+			bankerCards.getChildren().add(i);
+
+		bankerCards.setVisible(false);
+		fadeCards(playerImageViews);
+		
+
+		if (gameLogic.handTotal(bankerHand) >= 8 || gameLogic.handTotal(playerHand) >= 8)
+			winner = gameLogic.whoWon(playerHand, bankerHand);
+
 	}
 
 	public void changeCurrentScene(String newScene) {

@@ -9,14 +9,11 @@ public class BaccaratGameLogic {
         {false, false, false, false, false, false, true, true, false, false, false}
     };
 
-
-    // Player dealt hand first, so they should win if natural,
-    // then Banker dealt hand, so they should win if natural.
     public String whoWon(ArrayList<Card> player, ArrayList<Card> banker) {
-        int playerScore = 9 - handTotal(player);
-        int bankerScore = 9 - handTotal(banker);
-        return playerScore < bankerScore ? "Player" :
-               bankerScore < playerScore ? "Banker" : "Draw";
+        int playerScore = handTotal(player);
+        int bankerScore = handTotal(banker);
+        return playerScore > bankerScore ? "Player" :
+               bankerScore > playerScore ? "Banker" : "Draw";
     }
 
     public int handTotal(ArrayList<Card> hand) {
