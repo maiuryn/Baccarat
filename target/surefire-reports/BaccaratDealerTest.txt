@@ -1,8 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: BaccaratDealerTest
 -------------------------------------------------------------------------------
-Tests run: 3, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.132 s <<< FAILURE! - in BaccaratDealerTest
-test_constructor_dealer_matching_deck  Time elapsed: 0.031 s  <<< FAILURE!
-org.opentest4j.AssertionFailedError: Values not matching ==> array contents differ at index [0], expected: <0> but was: <1>
-	at BaccaratDealerTest.test_constructor_dealer_matching_deck(BaccaratDealerTest.java:109)
-
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.108 s - in BaccaratDealerTest

@@ -38,6 +38,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.ComboBox;
 import javafx.scene.image.Image;
 import javafx.scene.transform.Translate;
+import javafx.scene.Node;
 
 
 public class BaccaratGame extends Application {
@@ -73,6 +74,30 @@ public class BaccaratGame extends Application {
 		initGame();
 	}
 
+	public void setPlayerHand(ArrayList<Card> hand) {
+		this.playerHand = hand;
+	}
+
+	public void setBankerHand(ArrayList<Card> hand) {
+		this.bankerHand = hand;
+	}
+	
+	public ArrayList<Card> getPlayerHand() {
+		return this.playerHand;
+	}
+
+	public ArrayList<Card> getBankerHand() {
+		return this.bankerHand;
+	}
+
+	public void setCurrentBet(double money) {
+		this.currentBet = money;
+	}
+
+	public void setBetSelection(String selection) {
+		this.betSelection = selection;
+	}
+
 	public double evaluateWinnings() {
 		String result = gameLogic.whoWon(playerHand, bankerHand);
 		double winnings = 0;
@@ -82,10 +107,10 @@ public class BaccaratGame extends Application {
 			else if (result == "Banker") 
 				winnings += (currentBet * 2) * .95;
 			else 
-				winnings += currentBet * 8;
+				winnings += currentBet * 9;
 		}
 
-		return winnings;
+		return Double.parseDouble(String.format("%.2f", winnings));
 	}
 
 	private Button titleButton() {
@@ -93,7 +118,8 @@ public class BaccaratGame extends Application {
 		titleButton.setFont(new Font(15));
 
 		titleButton.setOnAction(e -> {
-			changeCurrentScene("title");
+			if (!busy)
+				changeCurrentScene("title");
 		});
 
 		return titleButton;
@@ -109,6 +135,47 @@ public class BaccaratGame extends Application {
 		});
 			
 		return closeButton;
+	}
+
+	private HBox moneyBar() {
+		Text currentMoneyText = new Text("Current Money: " + currentMoney);
+		Text totalWinningsText = new Text("Total Winnings: " + totalWinnings);
+		Text currentBetText = new Text("Current Bet: " + currentBet);
+
+		currentBetText.setFont(new Font(30));
+		totalWinningsText.setFont(new Font(30));
+		currentMoneyText.setFont(new Font(30));
+
+		HBox moneyBar = new HBox(currentMoneyText, totalWinningsText, currentBetText);
+		HBox.setMargin(currentMoneyText, new Insets(30, 0, 30, 0));
+		HBox.setMargin(totalWinningsText, new Insets(30, 50, 30, 50));
+		HBox.setMargin(currentBetText, new Insets(30, 0,30, 0));
+
+		moneyBar.setAlignment(Pos.CENTER);
+
+		Background background = new Background(new BackgroundFill(Color.GREY, new CornerRadii(10), new Insets(10, 10, 10, 10)));
+		moneyBar.setBackground(background);
+
+		return moneyBar;
+	}
+
+	private void updateMoneyBar() {
+		((Text)((HBox)((BorderPane)currentScreen.getChildren().get(2)).getChildren().get(2)).getChildren().get(0)).setText("Current Money: " + currentMoney);
+		((Text)((HBox)((BorderPane)currentScreen.getChildren().get(2)).getChildren().get(2)).getChildren().get(1)).setText("Total Winnings: " + totalWinnings);
+		((Text)((HBox)((BorderPane)currentScreen.getChildren().get(2)).getChildren().get(2)).getChildren().get(2)).setText("Current Bet: " + currentBet);
+	}
+
+	private Text resultText(String result) {
+		Text resultText = new Text();
+
+		resultText.setFont(new Font(80));
+
+		if (betSelection == result) 
+			resultText.setText("You Win!");
+		else 
+			resultText.setText("You Lose!");
+
+		return resultText;
 	}
 
 	private BorderPane betPhase() {
@@ -138,7 +205,7 @@ public class BaccaratGame extends Application {
 		});
 
 		betAmount.setOnKeyTyped(e -> {
-			currentBet = Double.parseDouble(betAmount.getText());
+			currentBet = Math.min(Double.parseDouble(betAmount.getText()), currentMoney);
 			betAmount.setText(String.format("%.2f", currentBet));
 		});
 		
@@ -160,10 +227,16 @@ public class BaccaratGame extends Application {
 		confirmButton.setOnAction(e -> {
 			if (betAmount.getText() != null && cb.getValue() != null) {
 				currentBet = Double.parseDouble(betAmount.getText());
+				currentMoney -= currentBet;
+				betSelection = cb.getValue();
+
+				updateMoneyBar();
+
 				int lastIndex = this.currentScreen.getChildren().size() - 1;
 				this.currentScreen.getChildren().remove(lastIndex);
+
+				busy = true;
 				playGame();
-				busy = false;
 			}
 		});
 
@@ -234,7 +307,8 @@ public class BaccaratGame extends Application {
 		Background background = new Background(new BackgroundFill(Color.LIGHTGREY, new CornerRadii(10), new Insets(0, 0, 0, 0)));
 		root.setBackground(background);
 
-		// fill stats
+		for (String s : history.getLog())
+			log.getItems().add(s);
 
 		return root;
 	}
@@ -251,8 +325,9 @@ public class BaccaratGame extends Application {
 			+ "The score of a card is as follows:\n"
 			+ "\tThe suite of the card does not matter.\n\tAce is 1.\n\t2-9 have the same score as the number.\n\t10, J, Q, and K, have score 0.\n\n"
 			+ "Before the game starts, there is a betting phase. Place a bet on what you expect the game to result in.\n"
-			+ "The game starts by dealing two cards to the player. At this point, if the player has a natural win, the player will win.\n"
-			+ "Then, two cards are dealt to the banker. If the banker has a natural win, the banker will win.\n"
+			+ "The game starts by dealing two cards to the player.\n"
+			+ "Then, two cards are dealt to the banker.\n"
+			+ "If either the banker or the player have a natural win, then the hand that has a natural win will win.\n"
 			+ "If both the banker and the player have a natural, then the higher natural is chosen for the winner. If both are the same number, then the game is a draw. \n"
 			+ "Next, the player will go first. If the player's hand totals to 5 or less, The Player gets one more card. If the hand totals to 6 or 7 points, no more cards are given.\n"
 			+ "Points will be totaled up to 9. If points go over 9, only the remaining points past 9 will be counted as points.\n"
@@ -320,6 +395,7 @@ public class BaccaratGame extends Application {
 
 		HBox menuBar = new HBox(helpButton, statsButton, settingsButton);
 		HBox.setMargin(statsButton, new Insets(0, 20, 0, 20));
+
 		return menuBar;
 	}
 	
@@ -366,7 +442,12 @@ public class BaccaratGame extends Application {
 		BorderPane top = new BorderPane();
 		HBox playerCards = new HBox(20);
 		HBox bankerCards = new HBox(20);
-		HBox cards = new HBox(200, playerCards, bankerCards);
+		Text playerScore = new Text();
+		Text bankerScore = new Text();
+		VBox playerBoxContent = new VBox(playerCards, playerScore);
+		VBox bankerBoxContent = new VBox(bankerCards, bankerScore);
+		HBox cards = new HBox(200, playerBoxContent, bankerBoxContent);
+		HBox moneyBar = moneyBar();
 
 		Text playerTitle = new Text("Player");
 		Text bankerTitle = new Text("Banker");
@@ -376,8 +457,8 @@ public class BaccaratGame extends Application {
 		handTitles.setAlignment(Pos.TOP_CENTER);
 
 		cards.setAlignment(Pos.CENTER);
-		playerCards.setAlignment(Pos.CENTER_LEFT);
-		bankerCards.setAlignment(Pos.CENTER_LEFT);
+		playerBoxContent.setAlignment(Pos.CENTER_LEFT);
+		bankerBoxContent.setAlignment(Pos.CENTER_RIGHT);
 
 		StackPane root = new StackPane(cards, handTitles, bp);
 		
@@ -387,6 +468,7 @@ public class BaccaratGame extends Application {
 		
 		bp.setCenter(beginButton);
 		bp.setTop(top);
+		bp.setBottom(moneyBar);
 		root.setBackground(background());
 
 		titleButton.setAlignment(Pos.TOP_LEFT);
@@ -401,6 +483,8 @@ public class BaccaratGame extends Application {
 		Translate cardsT = new Translate(0, -75, 0);
 		cards.getTransforms().addAll(cardsT);
 		StackPane.setMargin(handTitles, new Insets(75, 10, 10, 10));
+
+		beginButton.setId("begin_button");
 
 		beginButton.setOnAction(e -> {
 			if (!busy) {
@@ -419,7 +503,7 @@ public class BaccaratGame extends Application {
 	private String getUrl(Card c) {
 		String suite = c.getSuite().substring(0, 1).toLowerCase();
 		String cardVal[] = {"a", "2", "3", "4", "5", "6", "7", "8", "9", "10", "j", "q", "k"}; 
-		String url = "/large/card_b_" + suite + cardVal[c.getId()] + "_large.png";
+		String url = "/large/card_b_" + suite + cardVal[c.getId() - 1] + "_large.png";
 		System.out.println(url);
 		return url;
 	}
@@ -433,14 +517,65 @@ public class BaccaratGame extends Application {
 		return imgs;
 	}
 
-	private void fadeCards(ArrayList<ImageView> hand) {
-		for (ImageView i : hand) {
-			FadeTransition ft = new FadeTransition(Duration.millis(5000), i);
+	private void fadeCards(ArrayList<ImageView> hand1, ArrayList<ImageView> hand2, Node ...elements) {
+		ArrayList<FadeTransition> transitions = new ArrayList<>();
+		
+		for (ImageView i : hand1) {
+			i.setVisible(true);
+			FadeTransition ft = new FadeTransition(Duration.millis(1000), i);
 			ft.setFromValue(0);
 			ft.setToValue(1);
 
-			ft.play();
+			transitions.add(ft);
 		}
+
+		for (ImageView i : hand2) {
+			i.setVisible(true);
+			FadeTransition ft = new FadeTransition(Duration.millis(1000), i);
+			ft.setFromValue(0);
+			ft.setToValue(1);
+
+			transitions.add(ft);
+		}
+		
+		for (Node i : elements) {
+			i.setVisible(true);
+			FadeTransition ft = new FadeTransition(Duration.millis(1000), i);
+			ft.setFromValue(0);
+			ft.setToValue(1);
+
+			transitions.add(ft);
+		}
+
+		SequentialTransition st = new SequentialTransition();
+
+		for (FadeTransition f : transitions) {
+			st.getChildren().add(f);
+		}
+
+		st.play();
+
+		st.setOnFinished(e -> {
+			updateMoneyBar();
+			
+			Button beginButton = (Button)currentScene.lookup("#begin_button");
+			if (currentMoney > 0) {
+				beginButton.setText("Play again");
+			}
+			else {
+				beginButton.setText("Restart game");
+				beginButton.setOnAction(f -> {
+					initGame();
+					changeCurrentScene("title");
+				});
+			}	
+			beginButton.setVisible(true);
+
+			Text resultText = (Text)currentScene.lookup("#result_text");
+			currentScreen.getChildren().remove(resultText);
+
+			busy = false;
+		});
 	}
 
 	private ArrayList<ImageView> loadImageViews(ArrayList<Image> hand) {
@@ -456,9 +591,15 @@ public class BaccaratGame extends Application {
 	}
 
 	private void playGame() {
+		theDealer.generateDeck();
+		playerHand = new ArrayList<>();
+		bankerHand = new ArrayList<>();
+		
 		HBox cards = (HBox)this.currentScreen.getChildren().get(0);
-		HBox playerCards = (HBox)cards.getChildren().get(0);
-		HBox bankerCards = (HBox)cards.getChildren().get(1);
+		HBox playerCards = (HBox)((VBox)cards.getChildren().get(0)).getChildren().get(0);
+		Text playerScoreText = (Text)((VBox)cards.getChildren().get(0)).getChildren().get(1);
+		HBox bankerCards = (HBox)((VBox)cards.getChildren().get(1)).getChildren().get(0);
+		Text bankerScoreText = (Text)((VBox)cards.getChildren().get(1)).getChildren().get(1);
 
 		String winner;
 
@@ -466,27 +607,57 @@ public class BaccaratGame extends Application {
 		this.playerHand = theDealer.dealHand();
 		this.bankerHand = theDealer.dealHand();
 		
+		if (gameLogic.handTotal(bankerHand) < 8 && gameLogic.handTotal(playerHand) < 8) {
+			Card playerDraw = null;
+
+			if (gameLogic.evaluatePlayerDraw(playerHand)) {
+				playerDraw = theDealer.drawOne();
+				playerHand.add(playerDraw);
+			}
+
+			if (gameLogic.evaluateBankerDraw(bankerHand, playerDraw)) {
+				bankerHand.add(theDealer.drawOne());
+			}
+		}
+		
+		winner = gameLogic.whoWon(playerHand, bankerHand);
+		double winnings = evaluateWinnings();
+		int playerScore = gameLogic.handTotal(playerHand); 
+		int bankerScore = gameLogic.handTotal(bankerHand);
+		history.add(playerScore, bankerScore, winner, betSelection, winnings);
+
 		ArrayList<Image> playerImages = loadCards(playerHand);
 		ArrayList<Image> bankerImages = loadCards(bankerHand);
 		
 		ArrayList<ImageView> playerImageViews = loadImageViews(playerImages);
 		ArrayList<ImageView> bankerImageViews = loadImageViews(bankerImages);
-		
+
+		playerCards.getChildren().clear();
+		bankerCards.getChildren().clear();
+
 		for (ImageView i : playerImageViews)
 			playerCards.getChildren().add(i);
 		for (ImageView i : bankerImageViews)
 			bankerCards.getChildren().add(i);
 
-		bankerCards.setVisible(false);
-		fadeCards(playerImageViews);
+		playerScoreText.setVisible(false);
+		bankerScoreText.setVisible(false);
+		bankerScoreText.setFont(new Font(30));
+		bankerScoreText.setText("Banker's Score: " + bankerScore);
+		playerScoreText.setFont(new Font(30));
+		playerScoreText.setText("Player's Score: " + playerScore);
 		
+		Text resultText = resultText(winner);
+		resultText.setId("result_text");
+		currentScreen.getChildren().add(resultText);
 
-		if (gameLogic.handTotal(bankerHand) >= 8 || gameLogic.handTotal(playerHand) >= 8)
-			winner = gameLogic.whoWon(playerHand, bankerHand);
+		currentMoney += winnings;
+		totalWinnings += winnings;
 
+		fadeCards(playerImageViews, bankerImageViews, playerScoreText, bankerScoreText, resultText);
 	}
 
-	public void changeCurrentScene(String newScene) {
+	private void changeCurrentScene(String newScene) {
 		this.currentSceneName = newScene;
 
 		if (currentSceneName == "title")
@@ -498,9 +669,7 @@ public class BaccaratGame extends Application {
 		
 		if (currentScene == null)
 			this.currentScene = new Scene(currentScreen, 1280, 768);
-
-		// System.out.println(currentScreen);
-		// System.out.println(currentSceneName);
+			
 		currentScene.setRoot(currentScreen);
 	}
 
